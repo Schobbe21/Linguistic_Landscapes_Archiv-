@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Kuratiertes Forschungskorpus zur Linguistic Landscape von Liantang, Shenzhen.">
+<title>Liantang / 莲塘 — Linguistic Landscapes Archive</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --paper:#f3f0e9;
+  --ink:#11110f;
+  --muted:#77736b;
+  --line:#cfc9bd;
+  --accent:#b53b2c;
+  --panel:#ebe7de;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:Inter,"Noto Sans SC",sans-serif;
+}
+button,input,select{font:inherit}
+button{color:inherit}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+.wrap{width:min(1500px,94vw);margin:auto}
+
+.topbar{
+  position:sticky;top:0;z-index:30;
+  display:grid;grid-template-columns:1fr auto;
+  align-items:center;
+  padding:16px 0 12px;
+  border-bottom:1px solid var(--ink);
+  background:color-mix(in srgb,var(--paper) 94%,transparent);
+  backdrop-filter:blur(10px);
+  font-family:"IBM Plex Mono",monospace;
+  font-size:11px;text-transform:uppercase;letter-spacing:.08em;
+}
+.brand{font-weight:600}
+.topnav{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.topnav a:hover{color:var(--accent)}
+
+.hero{
+  display:grid;grid-template-columns:1.08fr .92fr;
+  min-height:72vh;border-bottom:1px solid var(--ink)
+}
+.hero-left{padding:60px 48px 48px 0;display:flex;flex-direction:column;justify-content:space-between}
+.kicker{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)}
+.hero h1{
+  margin:18px 0 24px;
+  font-family:"Noto Sans SC",Inter,sans-serif;
+  font-size:clamp(66px,10vw,158px);
+  line-height:.82;font-weight:900;letter-spacing:-.055em
+}
+.hero h1 span{display:block}
+.hero h1 .cn{font-size:.57em;letter-spacing:-.02em;margin-top:9px}
+.hero-copy{max-width:690px;font-size:18px;line-height:1.63}
+.hero-note{
+  margin-top:20px;max-width:680px;
+  font-family:"IBM Plex Mono",monospace;font-size:10px;line-height:1.6;color:var(--muted)
+}
+.hero-meta{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:38px}
+.stat{border-top:1px solid var(--ink);padding-top:10px;font-family:"IBM Plex Mono",monospace;font-size:10px;text-transform:uppercase}
+.stat b{font-family:Inter,sans-serif;font-size:26px;display:block;margin-bottom:4px;letter-spacing:-.04em}
+
+.hero-right{position:relative;border-left:1px solid var(--ink);padding:34px;display:flex;align-items:flex-end}
+.hero-photo{
+  width:100%;height:min(72vh,760px);min-height:520px;
+  object-fit:cover;background:var(--panel);
+}
+.vertical{
+  position:absolute;right:9px;top:26px;
+  writing-mode:vertical-rl;
+  font-family:"Noto Sans SC",sans-serif;font-weight:700;letter-spacing:.18em;font-size:13px
+}
+.caption{
+  position:absolute;left:34px;top:34px;z-index:2;
+  background:var(--paper);padding:8px 10px;
+  font-family:"IBM Plex Mono",monospace;font-size:10px
+}
+
+.section{padding:50px 0 70px;border-bottom:1px solid var(--ink)}
+.section-head{
+  display:grid;grid-template-columns:160px 1fr auto;
+  gap:24px;align-items:end;margin-bottom:28px
+}
+.section-no{font-family:"IBM Plex Mono",monospace;color:var(--accent);font-size:11px}
+.section h2{margin:0;font-size:clamp(38px,5vw,72px);line-height:.95;letter-spacing:-.045em}
+
+.controls{
+  display:grid;
+  grid-template-columns:minmax(240px,1.3fr) repeat(4,minmax(150px,.7fr));
+  border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);
+  margin-bottom:26px
+}
+.control{
+  padding:12px 12px;border-right:1px solid var(--line)
+}
+.control:last-child{border-right:0}
+.control label{
+  display:block;margin-bottom:6px;
+  font-family:"IBM Plex Mono",monospace;font-size:9px;text-transform:uppercase;color:var(--muted)
+}
+.control input,.control select{
+  width:100%;border:0;background:transparent;color:var(--ink);outline:none;
+  font-size:13px;padding:0
+}
+.control select{cursor:pointer}
+.results-line{
+  display:flex;justify-content:space-between;gap:16px;align-items:center;
+  margin-bottom:20px;font-family:"IBM Plex Mono",monospace;font-size:10px;text-transform:uppercase;color:var(--muted)
+}
+.clear-btn{
+  border:0;border-bottom:1px solid var(--ink);background:transparent;padding:2px 0;
+  font-family:"IBM Plex Mono",monospace;font-size:10px;text-transform:uppercase;cursor:pointer
+}
+
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:18px}
+.card{
+  grid-column:span 4;border-top:1px solid var(--ink);padding-top:9px;
+  cursor:pointer;min-width:0
+}
+.card:nth-child(7n+1){grid-column:span 8}
+.card:nth-child(11n+5){grid-column:span 6}
+.card:nth-child(11n+6){grid-column:span 6}
+.card:hover .card-image{transform:translateY(-2px)}
+.record-head{
+  display:flex;justify-content:space-between;gap:12px;align-items:center;
+  font-family:"IBM Plex Mono",monospace;font-size:9px;text-transform:uppercase;color:var(--muted)
+}
+.card-image{
+  width:100%;aspect-ratio:4/3;object-fit:cover;
+  background:var(--panel);margin:10px 0 11px;transition:transform .18s ease
+}
+.card:nth-child(7n+1) .card-image{aspect-ratio:16/9}
+.card h3{
+  margin:0 0 8px;font-size:18px;line-height:1.25;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden
+}
+.tags{
+  font-family:"IBM Plex Mono",monospace;font-size:9px;line-height:1.65;
+  color:var(--muted);text-transform:uppercase
+}
+.view-record{
+  display:inline-block;margin-top:10px;border-bottom:1px solid var(--ink);
+  font-family:"IBM Plex Mono",monospace;font-size:9px;text-transform:uppercase
+}
+.empty{
+  grid-column:1/-1;padding:70px 0;border-top:1px solid var(--ink);
+  font-size:28px;letter-spacing:-.03em
+}
+
+.method{
+  display:grid;grid-template-columns:1fr 1fr;gap:44px
+}
+.method p{font-size:16px;line-height:1.7;margin:0 0 16px;max-width:720px}
+.method-box{border-top:1px solid var(--ink)}
+.method-row{
+  display:grid;grid-template-columns:180px 1fr;gap:20px;
+  padding:13px 0;border-bottom:1px solid var(--line)
+}
+.method-row dt{
+  font-family:"IBM Plex Mono",monospace;font-size:9px;text-transform:uppercase;color:var(--muted)
+}
+.method-row dd{margin:0;line-height:1.5;font-size:14px}
+
+.downloads{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+.btn{
+  border:1px solid var(--ink);background:transparent;padding:11px 14px;
+  font-family:"IBM Plex Mono",monospace;font-size:10px;text-transform:uppercase;cursor:pointer
+}
+.btn.primary{background:var(--ink);color:var(--paper)}
+.btn:hover{background:var(--accent);border-color:var(--accent);color:white}
+
+/* Detail overlay */
+.overlay{
+  position:fixed;inset:0;z-index:100;
+  background:rgba(17,17,15,.45);
+  display:none;align-items:stretch;justify-content:flex-end
+}
+.overlay.open{display:flex}
+.drawer{
+  width:min(1120px,94vw);height:100%;overflow:auto;background:var(--paper);
+  border-left:1px solid var(--ink);box-shadow:-20px 0 70px rgba(0,0,0,.12)
+}
+.drawer-top{
+  position:sticky;top:0;z-index:4;background:var(--paper);
+  display:flex;justify-content:space-between;align-items:center;
+  padding:14px 18px;border-bottom:1px solid var(--ink);
+  font-family:"IBM Plex Mono",monospace;font-size:10px;text-transform:uppercase
+}
+.drawer-close{border:0;background:transparent;cursor:pointer;font-size:20px;line-height:1;padding:4px}
+.drawer-body{padding:30px}
+.record-detail{display:grid;grid-template-columns:1.15fr .85fr;gap:34px;align-items:start}
+.detail-photo-wrap{position:sticky;top:70px}
+.detail-photo{width:100%;max-height:78vh;object-fit:contain;background:var(--panel)}
+.photo-note{
+  display:flex;justify-content:space-between;gap:14px;margin-top:8px;
+  font-family:"IBM Plex Mono",monospace;font-size:9px;color:var(--muted);text-transform:uppercase
+}
+.record-title{
+  margin:0 0 18px;font-size:clamp(42px,6vw,82px);line-height:.9;letter-spacing:-.05em
+}
+.badges{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:18px}
+.badge{
+  border:1px solid var(--ink);padding:6px 8px;
+  font-family:"IBM Plex Mono",monospace;font-size:9px;text-transform:uppercase
+}
+.record-data{border-top:1px solid var(--ink);margin:0}
+.data-row{
+  display:grid;grid-template-columns:155px 1fr;gap:18px;
+  padding:13px 0;border-bottom:1px solid var(--line)
+}
+.data-row dt{
+  font-family:"IBM Plex Mono",monospace;font-size:9px;text-transform:uppercase;color:var(--muted)
+}
+.data-row dd{margin:0;line-height:1.55;font-size:14px;white-space:pre-line}
+.observed{
+  font-family:"Noto Sans SC",Inter,sans-serif;font-size:24px!important;font-weight:700;line-height:1.45!important
+}
+
+footer{
+  display:grid;grid-template-columns:1fr auto;gap:30px;padding:26px 0 42px;
+  font-family:"IBM Plex Mono",monospace;font-size:9px;text-transform:uppercase;color:var(--muted)
+}
+
+@media(max-width:1100px){
+  .controls{grid-template-columns:1fr 1fr}
+  .control:nth-child(even){border-right:0}
+  .hero-meta{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:900px){
+  .topbar{grid-template-columns:1fr;gap:10px}
+  .hero{grid-template-columns:1fr}
+  .hero-left{padding-right:0}
+  .hero-right{border-left:0;border-top:1px solid var(--ink)}
+  .section-head{grid-template-columns:1fr}
+  .card,.card:nth-child(n){grid-column:span 12}
+  .record-detail,.method{grid-template-columns:1fr}
+  .detail-photo-wrap{position:static}
+}
+@media(max-width:620px){
+  .wrap{width:min(94vw,100%)}
+  .controls{grid-template-columns:1fr}
+  .control{border-right:0;border-bottom:1px solid var(--line)}
+  .control:last-child{border-bottom:0}
+  .hero-right,.drawer-body{padding:18px}
+  .hero-photo{min-height:390px}
+  .data-row,.method-row{grid-template-columns:1fr;gap:5px}
+  .record-title{font-size:42px}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="topbar">
+    <div class="brand">FIELD ARCHIVE / LINGUISTIC LANDSCAPES</div>
+    <nav class="topnav">
+      <a href="#collection">Collection</a>
+      <a href="#method">Coding</a>
+      <a href="#download">Download</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-left">
+      <div>
+        <div class="kicker">China / Shenzhen / Luohu / Liantang · CH_SZ_LH_LT</div>
+        <h1><span>LIAN</span><span>TANG</span><span class="cn">莲塘</span></h1>
+        <div class="hero-copy">
+          Kuratiertes Forschungskorpus zur sichtbaren Sprache im öffentlichen Raum von Liantang, Shenzhen.
+          Originalfotografien in Farbe werden mit der im Korpus erhobenen sprachlichen und funktionalen Kodierung verbunden.
+        </div>
+        <div class="hero-note">
+          Forschungsdaten werden aus dem freigegebenen Korpus dargestellt. Die Website ergänzt oder interpretiert fehlende Kategorien nicht automatisch.
+        </div>
+      </div>
+      <div class="hero-meta">
+        <div class="stat"><b id="statRecords">161</b>Datensätze</div>
+        <div class="stat"><b id="statBottom">–</b>Bottom-up</div>
+        <div class="stat"><b id="statTop">–</b>Top-down</div>
+        <div class="stat"><b id="statMulti">–</b>Bi-/Multilingual</div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="caption">FIELD IMAGE / CH_SZ_LH_LT_001</div>
+      <div class="vertical">公共空间中的语言</div>
+      <img class="hero-photo" src="Bilder/CH_SZ_LH_LT_001.jpg" alt="Liantang field record CH_SZ_LH_LT_001">
+    </div>
+  </section>
+
+  <section class="section" id="collection">
+    <div class="section-head">
+      <div class="section-no">01 / COLLECTION</div>
+      <h2>Visual Records</h2>
+      <div></div>
+    </div>
+
+    <div class="controls">
+      <div class="control">
+        <label for="search">Suche</label>
+        <input id="search" type="search" placeholder="ID, Text, Sprache, Kategorie …">
+      </div>
+      <div class="control">
+        <label for="filterType">Sign-Typ</label>
+        <select id="filterType"><option value="">Alle</option></select>
+      </div>
+      <div class="control">
+        <label for="filterFunction">Funktion</label>
+        <select id="filterFunction"><option value="">Alle</option></select>
+      </div>
+      <div class="control">
+        <label for="filterConfig">Konfiguration</label>
+        <select id="filterConfig"><option value="">Alle</option></select>
+      </div>
+      <div class="control">
+        <label for="filterSector">Geschäftlicher Bereich</label>
+        <select id="filterSector"><option value="">Alle</option></select>
+      </div>
+    </div>
+
+    <div class="results-line">
+      <span id="resultCount">161 / 161 Records</span>
+      <button class="clear-btn" id="clearFilters">Filter zurücksetzen</button>
+    </div>
+
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section class="section" id="method">
+    <div class="section-head">
+      <div class="section-no">02 / CODING</div>
+      <h2>Corpus Structure</h2>
+      <div></div>
+    </div>
+
+    <div class="method">
+      <div>
+        <p>
+          ID und Bilddatei werden getrennt geführt, sodass die dauerhafte Datensatz-ID auch dann stabil bleibt,
+          wenn sich die zugehörige Bilddatei oder ihr Dateiformat ändert.
+        </p>
+        <p>
+          Der Korpus erfasst unter anderem linguistische Konfiguration, verwendete Sprachen, sprachliche Dominanz,
+          Sign-Typ und Funktion. Die Kategorie „informativ“ wird eng verwendet: Sie gilt nur für Zeichen,
+          deren primäre Funktion in der Vermittlung sachlicher Informationen besteht.
+        </p>
+        <p>
+          Für Umschriften in lateinischen Schriftzeichen verwendet die Untersuchung den Terminus
+          <strong>romanisiertes Chinesisch</strong> und nicht pauschal „Pinyin“.
+        </p>
+      </div>
+
+      <dl class="method-box">
+        <div class="method-row"><dt>Sign-Typ</dt><dd>bottom-up · top-down · hybrid</dd></div>
+        <div class="method-row"><dt>Funktion</dt><dd>kommerziell · informativ · regulierend · symbolisch · gemischt</dd></div>
+        <div class="method-row"><dt>Geschäftliche Bereiche</dt><dd>Gastronomie · Gesundheit &amp; Körperpflege · Einzelhandel · Dienstleistungen · Unterkunft/Vermietung</dd></div>
+        <div class="method-row"><dt>Gastronomie</dt><dd>Streetfood · Restaurant · Franchise-Gastronomie · Getränke</dd></div>
+        <div class="method-row"><dt>Gesundheit &amp; Körperpflege</dt><dd>Massage · Ohrreinigung · Zahnmedizin · Sonstige</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section" id="download">
+    <div class="section-head">
+      <div class="section-no">03 / DATA</div>
+      <h2>Research Data</h2>
+      <div></div>
+    </div>
+    <div class="method">
+      <div>
+        <p>
+          Jeder Record verlinkt direkt auf die originale Bilddatei. Zusätzlich kann der auf dieser Seite publizierte
+          Metadatensatz als JSON oder CSV exportiert werden.
+        </p>
+        <p class="hero-note">
+          Die vorliegende Version übernimmt den Eintrag „Sichtbarer Text“ aus dem bestehenden Korpus unverändert.
+          Eine spätere Publikationsstufe kann sichtbaren Originaltext, Romanisierung und Übersetzung in getrennte Felder überführen.
+        </p>
+      </div>
+      <div class="downloads">
+        <button class="btn primary" id="downloadJson">Dataset JSON ↓</button>
+        <button class="btn" id="downloadCsv">Dataset CSV ↓</button>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div>GIP · Curated Research Archive</div>
+    <div>Liantang / Shenzhen · CH_SZ_LH_LT</div>
+  </footer>
+</div>
+
+<div class="overlay" id="overlay" aria-hidden="true">
+  <div class="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle">
+    <div class="drawer-top">
+      <span>Research Record</span>
+      <button class="drawer-close" id="drawerClose" aria-label="Schließen">×</button>
+    </div>
+    <div class="drawer-body" id="drawerBody"></div>
+  </div>
+</div>
+
+<script>
+const RECORDS = [{"id":"CH_SZ_LH_LT_001","image":"CH_SZ_LH_LT_001.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"bilingual","languages":"Chinesisch\nEnglisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Getränke","hk_relation_gastro":"","observed_text":"咖啡 (kāfēi)\n奶茶 (nǎichá)\nLULU TEA\n酷酷（kù kù）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_002","image":"CH_SZ_LH_LT_002.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Englisch","romanized_present":"nein","dominance":"Englisch","sign_type":"bottom-up","function":"gemischt","business_sector":"Einzelhandel","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"7-ELEVEN","annotator":"Samuel Sadiq","notes":"Branding;  ist eine Kette"},{"id":"CH_SZ_LH_LT_003","image":"CH_SZ_LH_LT_003.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Unterkunft/Vermietung","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"贝壳（bèi ké）\n找房大平台（zhǎo fáng dà píng tái）\n海量真房源（hǎi liàng zhēn fáng yuán）\n省心上贝壳（shěng xīn shàng bèi ké）\n新房（xīn fáng） \n二手房（èr shǒu fáng）  \n租房（zū fáng）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_004","image":"CH_SZ_LH_LT_004.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Dienstleistungen","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"携程旅游（xié chéng lǚ yóu）\n携手征程看世界（xié shǒu zhēng chéng kàn shì jiè）·惠及莲塘千万家（huì jí lián táng qiān wàn jiā）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_005","image":"CH_SZ_LH_LT_005.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Restaurant","hk_relation_gastro":"","observed_text":"达小黑燕庄（dá xiǎo hēi yàn zhuāng）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_006","image":"CH_SZ_LH_LT_006.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Restaurant","hk_relation_gastro":"","observed_text":"丁庄老火锅（dīng zhuāng lǎo huǒ guō）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_007","image":"CH_SZ_LH_LT_007.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Dienstleistungen","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"绿茵艺术（lǜ yīn yì shù）\n莲塘店（lián táng diàn）·梧桐山新居店（wú tóng shān xīn jū diàn）\n鹿茵翠地店（lù yīn cuì dì diàn）·四季御园店（sì jì yù yuán diàn）\n13688849694李老师（lǐ lǎo shī）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_008","image":"CH_SZ_LH_LT_008.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Dienstleistungen","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"鹿茵托管（lù yīn tuō guǎn）\n午晚托（wǔ wǎn tuō） \n晚辅（wǎn fǔ） \n幼小衔接（yòu xiǎo xián jiē）\n写字（xiě zì） \n拼音（pīn yīn） \n数学（shù xué） \n校外辅导（xiào wài fǔ dǎo）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_009","image":"CH_SZ_LH_LT_009.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Dienstleistungen","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"照相館（zhào xiàng guǎn）\n照复打过名印扫刻胶（zhào fù dǎ guò míng yìn sǎo kè jiāo）\n相印字胶片刷描盘装（xiàng yìn zì jiāo piàn shuā miáo pán zhuāng）\n第二代居民身份证相（dì èr dài jū mín shēn fèn zhèng xiàng）、深圳（shēn zhèn）“社保（shè bǎo）”卡照相点（kǎ zhào xiàng diǎn）\n护照（hù zhào）、港澳通行证（gǎng ào tōng xíng zhèng）、回乡证（huí xiāng zhèng）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_010","image":"CH_SZ_LH_LT_010.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Dienstleistungen","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"正章干洗 \n(Zhèngzhāng gānxǐ)","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_011","image":"CH_SZ_LH_LT_011.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Einzelhandel","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"一方电脑（yī fāng diàn nǎo）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_012","image":"CH_SZ_LH_LT_012.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"top-down","function":"regulierend","business_sector":"","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"停对位置（tíng duì wèi zhì）\n文明加分（wén míng jiā fēn）\nP\n停车不越线（tíng chē bù yuè xiàn），入框不歪斜（rù kuāng bù wāi xié），文明齐点赞（wén míng qí diǎn zàn）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_013","image":"CH_SZ_LH_LT_013.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Street Food","hk_relation_gastro":"","observed_text":"大埔腌面（dà bù yān miàn）\n正宗（zhèng zōng）\n主营（zhǔ yíng）： 腌面（yān miàn） 汤粉（tāng fěn） 炖汤（dùn tāng） 汤饭（tāng fàn）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_014","image":"CH_SZ_LH_LT_014.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"top-down","function":"regulierend","business_sector":"","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"文明骑行（wén míng qí xíng）\n城市更美（chéng shì gèng měi）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_015","image":"CH_SZ_LH_LT_015.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch\ntraditonielles Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Einzelhandel","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"安溪誠發茶行（ān xī chéng fā chá háng）","annotator":"Wu Haiyang","notes":"誠發ist eine traditionelle chinesische Schriftzeichen"},{"id":"CH_SZ_LH_LT_016","image":"CH_SZ_LH_LT_016.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Unterkunft/Vermietung","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"安居景福花园（ān jū jǐng fú huā yuán）\n安家罗湖（ān jiā luó hú） 趁现在（chèn xiàn zài） | 新品上市（xīn pǐn shàng shì）\n建筑面积（jiàn zhù miàn jī） 58-121m² 带装修二至四房（dài zhuāng xiū èr zhì sì fáng） 均价（jūn jià） 3.7 万元/m²（wàn yuán / m²）\n扫码领取购房福利（sǎo mǎ lǐng qǔ gòu fáng fú lì）\nVIP LINE 0755 86266999\n营销中心（yíng xiāo zhōng xīn）：安荟邻北广场扶梯上楼直达（ān huì lín běi guǎng chǎng fú tī shàng lóu zhí dá）\n火热销售中（huǒ rè xiāo shòu zhōng）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_017","image":"CH_SZ_LH_LT_017.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gesundheit&Körperpflege","health_subgroup":"Massage","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"珈美源足艺养生馆（jiā měi yuán zú yì yǎng shēng guǎn）\n足浴（zú yù） 按摩（àn mó） 推油（tuī yóu） 采耳（cǎi ěr）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_018","image":"CH_SZ_LH_LT_018.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch\ntraditonielles Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Einzelhandel","health_subgroup":"","gastro_subgroup":"Street Food","hk_relation_gastro":"ja","observed_text":"瑜（yú）\n厚興（hòu xīng）\n黃錦（huáng jǐn）\n瑜記（yú jì）\n蓮塘店（lián táng diàn）\n香港品牌手撕雞專門店（xiāng gǎng pǐn pái shǒu sī jī zhuān mén diàn）","annotator":"Wu Haiyang","notes":"Die gesamte Werbetafel ist in traditionellen chinesischen Schriftzeichen verfasst, was möglicherweise damit zusammenhängt, dass es sich um eine Marke aus Hongkong handelt."},{"id":"CH_SZ_LH_LT_019","image":"CH_SZ_LH_LT_019.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Street Food","hk_relation_gastro":"","observed_text":"米小螺 (Mǐ Xiǎo Luó)\n广西米粉 (Guǎngxī mǐfěn)\n柳州螺蛳粉 (Liǔzhōu luósīfěn)\n桂林米粉 (Guìlín mǐfěn)\n南宁老友粉 (Nánníng lǎoyǒu fěn)","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_020","image":"CH_SZ_LH_LT_020.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Dienstleistungen","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"归心瑜伽（guī xīn yú jiā） | 请上二楼（qǐng shàng èr lóu） 209\n普拉提（pǔ lā tí）\n瑜伽（yú jiā）\n产后修复（chǎn hòu xiū fù） 减脂塑形（jiǎn zhī sù xíng） 肩颈理疗（jiān jǐng lǐ liáo） 筋膜放松（jīn mó fàng sōng） 内脏调理（nèi zàng tiáo lǐ）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_021","image":"CH_SZ_LH_LT_021.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Einzelhandel","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"三乡椰子鸡\n椰子（海南特产）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_022","image":"CH_SZ_LH_LT_022.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"bilingual","languages":"Chinesisch\nEnglisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gesundheit&Körperpflege","health_subgroup":"Sonstiges","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"语甲（yǔ jiǎ ）\n美容中心（ měi róng zhōng xīn ）\nYujia Nail & Beauty Cente\n语甲美容（ yǔ jiǎ měi róng ）\n美甲（ měi jiǎ ）\n美睫（měi jié ）\n化妆（huà zhuāng ）\n护肤（hù fū ）\n耳洞（ ěr dòng ）\n纹绣（ wén xiù ）\n美团团购特惠中（ měi tuán tuán gòu tè huì zhōng）\n二楼210（èr lóu 210）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_023","image":"CH_SZ_LH_LT_023.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"bilingual","languages":"Chinesisch\nEnglisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gesundheit&Körperpflege","health_subgroup":"Massage","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"爱港私人订制（ài gǎng sī rén dìng zhì）\nLoving harbour massage studio\n足道（zú dào）|推拿（tuī ná）\n整脊（zhěng jǐ）\n艾灸（ài jiǔ）\nSPA\n采耳（cǎi ěr）\n抖音团购特惠中（dǒu yīn tuán gòu tè huì zhōng） 24小时营业（xiǎo shí yíng yè）\n二楼（èr lóu）218","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_024","image":"CH_SZ_LH_LT_024.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Street Food","hk_relation_gastro":"","observed_text":"影姐香酥烧饼（yǐng jiě xiāng sū shāo bǐng）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_025","image":"CH_SZ_LH_LT_025.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Street Food","hk_relation_gastro":"","observed_text":"之谷渔粉（zhī gǔ yú fěn）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_026","image":"CH_SZ_LH_LT_026.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gesundheit&Körperpflege","health_subgroup":"Zahnmedizin","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"诊疗项目（zhěn liáo xiàng mù）\n牙齿种植（yá chǐ zhòng zhí）\n冠体修复（guān tǐ xiū fù）\n牙齿矫正（yá chǐ jiǎo zhèng）\n美白贴面（měi bái tiē miàn）\n牙周治疗（yá zhōu zhì liáo）\n儿童齿科（ér tóng chǐ kē）\n深圳雅冠口腔门诊部（shēn zhèn yǎ guān kǒu qiāng mén zhěn bù） \n前行（qián xíng）\n30米上二楼（mǐ shàng èr lóu）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_027","image":"CH_SZ_LH_LT_027.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Unterkunft/Vermietung","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"润福单身公寓出租（rùn fú dān shēn gōng yù chū zū） \n拎包入住（līn bāo rù zhù）\n民水民电（mín shuǐ mín diàn） \n月租日租均可（yuè zū rì zū jūn kě）电话（diàn huà）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_028","image":"CH_SZ_LH_LT_028.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Street Food","hk_relation_gastro":"","observed_text":"云浮（yún fú）\n淇仔石磨肠粉（qí zǎi shí mó cháng fěn）\n肠粉（cháng fěn）·汤饭（tāng fàn）·粥粉面（zhōu fěn miàn）・宵夜（xiāo yè）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_029","image":"CH_SZ_LH_LT_029.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"bilingual","languages":"Chinesisch\nEnglisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"gemischt","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Street Food","hk_relation_gastro":"","observed_text":"沙县小吃集团（shā xiàn xiǎo chī jí tuán）\nSHAXIAN SNACKS\n沙县小吃（shā xiàn xiǎo chī）","annotator":"Samuel Sadiq","notes":"Branding;  ist eine Kette"},{"id":"CH_SZ_LH_LT_030","image":"CH_SZ_LH_LT_030.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"top-down","function":"regulierend","business_sector":"","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"文明健康有你有我（wén míng jiàn kāng yǒu nǐ yǒu wǒ）\n文明行为篇（wén míng xíng wéi piān）\n保护生态共建文明（bǎo hù shēng tài gòng jiàn wén míng）\n爱护环境整洁干净（ài hù huán jìng zhěng jié gān jìng）\n不乱扔垃圾（bù luàn rēng lā jī）\n中共深圳市委宣传部（zhōng gòng shēn zhèn shì wěi xuān chuán bù） \n深圳市文明办（shēn zhèn shì wén míng bàn）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_031","image":"CH_SZ_LH_LT_031.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"top-down","function":"gemischt","business_sector":"","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"“讲文明树新风（jiǎng wén míng shù xīn fēng）”公益广告（gōng yì guǎng gào）\n社会主义核心价值观（shè huì zhǔ yì hé xīn jià zhí guān）\n富强民主文明和谐自由平等（fù qiáng mín zhǔ wén míng hé xié zì yóu píng děng） 公正法治爱国敬业诚信友善（gōng zhèng fǎ zhì ài guó jìng yè chéng xìn yǒu shàn）\n全社会关心关爱（quán shè huì guān xīn guān ài）\n未成年人健康成长（wèi chéng nián rén jiàn kāng chéng zhǎng）\n中共深圳市委宣传部监制（zhōng gòng shēn zhèn shì wěi xuān chuán bù jiān zhì）","annotator":"Samuel Sadiq","notes":"Regulierende Zeichen adressieren konkretes Verhalten Symbolische Zeichen vermitteln Werte und Ideologie"},{"id":"CH_SZ_LH_LT_032","image":"CH_SZ_LH_LT_032.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"top-down","function":"regulierend","business_sector":"","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"培育和践行社会主义核心价值观（péi yù hé jiàn xíng shè huì zhǔ yì hé xīn jià zhí guān）\n富强民主文明和谐自由平等公正法治（fù qiáng mín zhǔ wén míng hé xié zì yóu píng děng gōng zhèng fǎ zhì） 爱国敬业诚信友善（ài guó jìng yè chéng xìn yǒu shàn）\n讲文明树新风（jiǎng wén míng shù xīn fēng）\n垃圾不落地（lā jī bù luò dì）\n深圳更美丽（shēn zhèn gèng měi lì）\n给自己一个文明习惯（gěi zì jǐ yí gè wén míng xí guàn）,\n留城市（liú chéng shì）\n一道靓丽风商（yí dào liàng lì fēng shāng）\n中共深圳市委宣传部监制（zhōng gòng shēn zhèn shì wěi xuān chuán bù jiān zhì）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_033","image":"CH_SZ_LH_LT_033.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Einzelhandel","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"惠乐美（huì lè měi） \n南油工厂折扣店（nán yóu gōng chǎng zhé kòu diàn）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_034","image":"CH_SZ_LH_LT_034.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gesundheit&Körperpflege","health_subgroup":"Zahnmedizin","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"亚兴酒店（yà xīng jiǔ diàn）\n雅冠口腔（yǎ guān kǒu qiāng）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_035","image":"CH_SZ_LH_LT_035.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"bilingual","languages":"Französisch\nChinesisch","romanized_present":"nein","dominance":"Gleichwertig","sign_type":"bottom-up","function":"gemischt","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Restaurant","hk_relation_gastro":"","observed_text":"La César \n乐凯撒披萨（lè kǎi sā pī sà）","annotator":"Samuel Sadiq","notes":"Branding;  ist eine Kette"},{"id":"CH_SZ_LH_LT_036","image":"CH_SZ_LH_LT_036.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"bilingual","languages":"Englisch\nChinesisch","romanized_present":"nein","dominance":"Englisch","sign_type":"bottom-up","function":"gemischt","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Getränke","hk_relation_gastro":"","observed_text":"luckin coffee\n瑞幸咖啡（ruì xìng kā fēi）","annotator":"Samuel Sadiq","notes":"Branding;  ist eine Kette"},{"id":"CH_SZ_LH_LT_037","image":"CH_SZ_LH_LT_037.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gesundheit&Körperpflege","health_subgroup":"Massage","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"紅石榴修腳（hóng shí liú xiū jiǎo）\nNO:SZ0003 国威店（guó wēi diàn）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_038","image":"CH_SZ_LH_LT_038.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"bilingual","languages":"Chinesisch\ntraditonielles Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Restaurant","hk_relation_gastro":"","observed_text":"和記（hé jì）\n本棟二樓（běn dòng èr lóu）\n脆肉鲩火锅（cuì ròu huàn huǒ guō）","annotator":"Wu Haiyang","notes":"和記und\n本棟二樓steht für traditionelles Chinesisch; „X记“ ist in Kanton eine gängige Bezeichnung, die in der Regel den Nachnamen des Geschäftsinhabers angibt."},{"id":"CH_SZ_LH_LT_039","image":"CH_SZ_LH_LT_039.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"bilingual","languages":"Englisch\nChinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"gemischt","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Street Food","hk_relation_gastro":"","observed_text":"McDonald's\n麦超所值（mài chāo suǒ zhí）\n鲜萃有堡（xiān cuì yǒu bǎo）\n大堡口福（dà bǎo kǒu fú）","annotator":"Samuel Sadiq","notes":"Branding;  ist eine Kette"},{"id":"CH_SZ_LH_LT_040","image":"CH_SZ_LH_LT_040.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Street Food","hk_relation_gastro":"","observed_text":"NO.0066 莲塘店（lián táng diàn）\n螺大二（luó dà èr）\nLUO DA ER\n螺蛳粉（luó sī fěn）\n桂林卤粉（guì lín lǔ fěn）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_041","image":"CH_SZ_LH_LT_041.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Street Food","hk_relation_gastro":"ja","observed_text":"味寶園⽜杂（wèi bǎo yuán niú zá）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_042","image":"CH_SZ_LH_LT_042.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Street Food","hk_relation_gastro":"","observed_text":"锦记（jǐn jì）·常德牛肉粉（cháng dé niú ròu fěn）\n特色湖南鲜粉（tè sè hú nán xiān fěn） 手工饺子（shǒu gōng jiǎo zi） 云吞（yún tūn）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_043","image":"CH_SZ_LH_LT_043.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Einzelhandel","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"羽乐体育（yǔ lè tǐ yù）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_044","image":"CH_SZ_LH_LT_044.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Einzelhandel","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"莲星（lián xīng）\n招牌（zhāo pái）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_045","image":"CH_SZ_LH_LT_045.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"ja","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Street Food","hk_relation_gastro":"","observed_text":"悦福园现炒简餐（yuè fú yuán xiàn chǎo jiǎn cān）\nYUE FU YUAN","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_046","image":"CH_SZ_LH_LT_046.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Dienstleistungen","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"综安驾校（zōng ān jià xiào）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_047","image":"CH_SZ_LH_LT_047.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Einzelhandel","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"美都乐商店（měi dōu lè shāng diàn）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_048","image":"CH_SZ_LH_LT_048.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Dienstleistungen","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"通品学车（tōng pǐn xué chē）\n学车热线（xué chē rè xiàn）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_049","image":"CH_SZ_LH_LT_049.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Einzelhandel","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"毛铺紫荞（máo pù zǐ qiáo）\n辰佳诺商行（chén jiā nuò shāng háng）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_050","image":"CH_SZ_LH_LT_050.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"ja","dominance":"Chinesisch","sign_type":"bottom-up","function":"gemischt","business_sector":"Einzelhandel","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"苏宁小店（sū níng xiǎo diàn）\nsuning","annotator":"Samuel Sadiq","notes":"Branding;  ist eine Kette"},{"id":"CH_SZ_LH_LT_051","image":"CH_SZ_LH_LT_051.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"bilingual","languages":"Chinesisch\nEnglisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Dienstleistungen","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"开启（kāi qǐ）\n魔（mó）\n力（lì）\nMAGIC OF FITNES\n鑫魔力健身（xīn mó lì jiàn shēn）\n深圳市（shēn zhèn shì）\n知名品牌连锁（zhī míng pǐn pái lián suǒ）\n扫码咨询（sǎo mǎ zī xún）\n电话（diàn huà）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_052","image":"CH_SZ_LH_LT_052.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"gemischt","business_sector":"","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"港币（gǎng bì）1:1消费（xiāo fèi）","annotator":"Samuel Sadiq","notes":"Es ist sowohl eine Sachinformation als auch eine Methode, um das Einkaufen zu erleichtern"},{"id":"CH_SZ_LH_LT_053","image":"CH_SZ_LH_LT_053.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"bilingual","languages":"Chinesisch\nEnglisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"gemischt","business_sector":"","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"Suning Home\nTAX FREE\n退税（tuì shuì）\n商店（shāng diàn）\n消費滿（xiāo fèi mǎn）\n¥200元即可參與（yuán jí kě cān yǔ）\n辦理地點（bàn lǐ dì diǎn）\nPLACE OF SERVICE\nCUSTOMER SERVICE CENTER\n蘇寧易購門店（sū níng yì gòu mén diàn） \n顧客服務中心（gù kè fú wù zhōng xīn）\n更省钱更贴心（gèng shěng qián gèng tiē xīn）","annotator":"Samuel Sadiq","notes":"Sie scheinen einerseits zu informieren, aber primär soll ein Kaufanreiz geschaffen werden. Primär komerziell, sekundär informativ"},{"id":"CH_SZ_LH_LT_054","image":"CH_SZ_LH_LT_054.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"bilingual","languages":"Chinesisch\nEnglisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"gemischt","business_sector":"","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"Suning Home\n享免费服务（xiǎng miǎn fèi fú wù）\n免费上门量房（shàng mén liàng fáng）\n免费家电（miǎn fèi jiā diàn）\n免费搭配设计（miǎn fèi dā pèi shè jì）\n免费局改设计（miǎn fèi jú gǎi shè jì）\n免费衣物护理（miǎn fèi yī wù hù lǐ）\n免费橱柜改造(洗碗机)（miǎn fèi chú guì gǎi zào （xǐ wǎn jī））\n免费中央空调（miǎn fèi zhōng yāng kōng tiáo）\n定制方案（dìng zhì fāng àn）\n苏宁易购（sū níng yì gòu）\n一键扫码（yí jiàn sǎo mǎ）\n无忧选购（wú yōu xuǎn gòu）\n更省钱更贴心（gèng shěng qián gèng tiē xīn）","annotator":"Samuel Sadiq","notes":"Sie scheinen einerseits zu informieren, aber primär soll ein Kaufanreiz geschaffen werden. Primär komerziell, sekundär informativ"},{"id":"CH_SZ_LH_LT_055","image":"CH_SZ_LH_LT_055.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"bilingual","languages":"Chinesisch\nEnglisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Restaurant","hk_relation_gastro":"ja","observed_text":"烧腊不用选（shāo là bù yòng xuǎn）\n就吃余百年（jiù chī yú bǎi nián）\nIT'S TIME TO SIU MEI\n●金牌烧鹅（jīn pái shāo é）/例牌（lì pái）\nTraditional Roasted Goose\n●金牌烧鹅三宝饭（jīn pái shāo é sān bǎo fàn）\nThree-Treasures Rice\n现烧现卖（xiàn shāo xiàn mài）\n现烧好时辰（xiàn shāo hǎo shí chén）\n烧腊味百年（shāo là wèi bǎi nián）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_056","image":"CH_SZ_LH_LT_056.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"multilingual","languages":"Chinesisch\nEnglisch\ntraditionelles Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gesundheit&Körperpflege","health_subgroup":"Zahnmedizin","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"尔睦口腔（ěr mù kǒu qiāng）\n2F\nERMU DENTAL\n爾睦口腔（ěr mù kǒu qiāng）  \n口腔门诊部（kǒu qiāng mén zhěn bù）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_057","image":"CH_SZ_LH_LT_057.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gesundheit&Körperpflege","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"紫阳风景图（zǐ yáng fēng jǐng tú）\n因为专业（yīn wèi zhuān yè）\n所以卓越（suǒ yǐ zhuó yuè）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_058","image":"CH_SZ_LH_LT_058.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Restaurant","hk_relation_gastro":"","observed_text":"幸福文泽（xìng fú wén zé）\n手工点心（shǒu gōng diǎn xīn）  \n现做现蒸（ xiàn zuò xiàn zhēng）\n粤式风味（yuè shì fēng wèi） \n新鲜制作（xīn xiān zhì zuò）\n请上二楼（qǐng shàng èr lóu）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_059","image":"CH_SZ_LH_LT_059.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Dienstleistungen","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"QIANYI BILLIARDS CLUB\n千易（qiān yì）\n台球俱乐部（tái qiú jù lè bù）\n桌球（zhuō qiú） \n棋牌（qí pái） \n茶艺（chá yì）\n3F","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_060","image":"CH_SZ_LH_LT_060.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"bilingual","languages":"Chinesisch\nEnglisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"gemischt","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Getränke","hk_relation_gastro":"","observed_text":"茶百道（chá bǎi dào）\nChaPanda","annotator":"Samuel Sadiq","notes":"Branding;  ist eine Kette"},{"id":"CH_SZ_LH_LT_061","image":"CH_SZ_LH_LT_061.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"bilingual","languages":"Englisch\nChinesisch","romanized_present":"nein","dominance":"Englisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Einzelhandel","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"PINK SHOW\n潮牌精品外贸服饰（cháo pái jīng pǐn wài mào fú shì）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_062","image":"CH_SZ_LH_LT_062.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gesundheit&Körperpflege","health_subgroup":"Massage","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"漢仁向養生坊（hàn rén xiàng yǎng shēng fāng）\n推拿（tuī ná） 足道（zú dào） \nSPA \n耳道（ěr dào）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_063","image":"CH_SZ_LH_LT_063.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Restaurant","hk_relation_gastro":"","observed_text":"东北（dōng běi）\n福源铁锅炖（fú yuán tiě guō dùn）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_064","image":"CH_SZ_LH_LT_064.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Street Food","hk_relation_gastro":"","observed_text":"咏春葱油饼（yǒng chūn cōng yóu bǐng）\n饼必须要吃手工现做的（bǐng bì xū yào chī shǒu gōng xiàn zuò de）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_065","image":"CH_SZ_LH_LT_065.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Street Food","hk_relation_gastro":"","observed_text":"正宗手撕鸡（zhèng zōng shǒu sī jī）\n香港品牌手撕鸡（xiāng gǎng pǐn pái shǒu sī jī）\n100% 新鲜土鸡制做（xīn xiān tǔ jī zhì zuò）\n品味独特（pǐn wèi dú tè）\n欢迎品尝（huān yíng pǐn cháng）\n皮爽肉滑（pí shuǎng ròu huá）・味甘香（wèi gān xiāng）\n20年品牌（nián pǐn pái）・值得信赖（zhí dé xìn lài）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_066","image":"CH_SZ_LH_LT_066.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch\ntraditonielles Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Restaurant","hk_relation_gastro":"","observed_text":"罗记（luó jì）\n正宗湛江（zhèng zōng zhàn jiāng）\n隔水蒸鸡（gé shuǐ zhēng jī）\n健康还是蒸的好（jiàn kāng hái shì zhēng de hǎo）","annotator":"Wu Haiyang","notes":"Wie auf dem sechzehnten Bild"},{"id":"CH_SZ_LH_LT_067","image":"CH_SZ_LH_LT_067.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"top-down","function":"symbolisch","business_sector":"","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"Luohu\n共筑服务强区美好明天（gòng zhù fú wù qiáng qū měi hǎo míng tiān）\n大力推进（dà lì tuī jìn）\n百千万工程（bǎi qiān wàn gōng chéng）","annotator":"Samuel Sadiq","notes":"Es soll ein starker Dienstleistungsbezirk aufgebaut werden; politische Vision"},{"id":"CH_SZ_LH_LT_068","image":"CH_SZ_LH_LT_068.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"bilingual","languages":"Chinesisch\nEnglisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gesundheit&Körperpflege","health_subgroup":"Massage und Ohrenreinigung","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"满足里\nMINDREAM\n修脚采耳养生（xiū jiǎo cǎi ěr yǎng shēng）\n给足理由爱自（gěi zú lǐ yóu ài zì）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_069","image":"CH_SZ_LH_LT_069.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gesundheit&Körperpflege","health_subgroup":"Massage","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"足浴（zú yù）\n红康源（hóng kāng yuán）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_070","image":"CH_SZ_LH_LT_070.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Restaurant","hk_relation_gastro":"","observed_text":"清远稻香麻鸡（qīng yuǎn dào xiāng má jī）\n第8分店（dì 8 fēn diàn）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_071","image":"CH_SZ_LH_LT_071.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch\nEnglisch\ntraditionelles Chinesisch","romanized_present":"ja","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Restaurant","hk_relation_gastro":"","observed_text":"羊妈妈（yáng mā ma）\nyangmama\n肉好（ròu hǎo） \n大口吃（dà kǒu chī）\n特煲煲（tè bāo bāo）\n肚包肉（dù bāo ròu）\n烤全羊（kǎo quán yáng）\n火锅烧烤（huǒ guō shāo kǎo）\n石橄欖雞煲（shí gǎn lǎn jī bāo）\n羊妈妈二号厅（yáng mā ma èr hào tīng）\n内设（nèi shè）6-30人豪华包（rén háo huá bāo） \n营业时间（yíng yè shí jiān）:上午（shàng wǔ）11:00-00:00","annotator":"Samuel Sadiq","notes":"Es enthält Südchinesische (Hähnchen mit Oliven) als auch Xinjiang und Ningxia Gerichte"},{"id":"CH_SZ_LH_LT_072","image":"CH_SZ_LH_LT_072.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Street Food","hk_relation_gastro":"","observed_text":"萍姐（píng jiě）\n柳州螺蛳粉（liǔ zhōu luó sī fěn）\n铁牛牛肉饭（tiě niú niú ròu fàn）\nTieniu Beef Rice\n莲塘店（lián táng diàn）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_073","image":"CH_SZ_LH_LT_073.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Street Food","hk_relation_gastro":"","observed_text":"永和快餐（yǒng hé kuài cān）\n健康实惠 现炒更美味（jiàn kāng shí huì xiàn chǎo gèng měi wèi）\n国威店（guó wēi diàn）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_074","image":"CH_SZ_LH_LT_074.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"bilingual","languages":"Chinesisch\nEnglisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Restaurant","hk_relation_gastro":"ja","observed_text":"新园茶餐厅（xīn yuán chá cān tīng）\nTEA RESTAURANT \n国威店（guó wēi diàn）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_075","image":"CH_SZ_LH_LT_075.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"","languages":"Chinesisch\nEnglisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"top-down","function":"informativ","business_sector":"","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"深圳市罗湖医院集团（shēn zhèn shì luó hú yī yuàn jí tuán）\nSHENZHEN SHILUO HU HOSPITAL\nGROUP\n仙湖社区健康服务中心（xiān hú shè qū jiàn kāng fú wù zhōng xīn）\nXIAN HU COMMUINTY HEALTH SERVICE CENTRE\n胸痛救治单元（xiōng tòng jiù zhì dān yuán）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_076","image":"CH_SZ_LH_LT_076.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Street Food","hk_relation_gastro":"","observed_text":"淡水咸鸡（dàn shuǐ xián jī）\n来自惠州淡水自家果场走地鸡（lái zì huì zhōu dàn shuǐ zì jiā guǒ chǎng zǒu dì jī）\n土鸡（tǔ jī）\n128元（yuán）/只（zhī）\n36元（yuán）/斤（jīn）\n土香鸡（tǔ xiāng jī）\n100元（yuán）/只（zhī）\n36元（yuán）/斤（jīn）\n青头鸭（qīng tóu yā）\n130元（yuán）/只（zhī）\n腌鸡（yān jī）\n43元（yuán）/斤（jīn）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_077","image":"CH_SZ_LH_LT_077.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"bilingual","languages":"Chinesisch\nEnglisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Einzelhandel","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"颜如玉书店（yán rú yù shū diàn）\nBOOKSTORE","annotator":"Wu Haiyang","notes":"„Yan Ru-yu“ stammt aus dem Gedicht „Gedicht zur Ermutigung zum Lernen“ von Zhao Heng, dem Kaiser Zhenzong der Song-Dynastie. Man sagt oft: „In den Büchern findet man goldene Häuser, in den Büchern findet man Yan Ru-yu.“"},{"id":"CH_SZ_LH_LT_078","image":"CH_SZ_LH_LT_078.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"bilingual","languages":"Chinesisch\nEnglisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Dienstleistungen","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"中国移动（zhōng guó yí dòng）\nChina Mobile","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_079","image":"CH_SZ_LH_LT_079.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Street Food","hk_relation_gastro":"","observed_text":"二十年老字号（èr shí nián lǎo zì hào）\n饼（bǐng）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_080","image":"CH_SZ_LH_LT_080.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"top-down","function":"gemischt","business_sector":"","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"响应祖国号召（xiǎng yìng zǔ guó hào zhào）\n踊跃报名参军（yǒng yuè bào míng cān jūn）\n全国征兵网址（quán guó zhēng bīng wǎng zhǐ） http://www.gfbzb.gov.cn\n征兵报名电话（zhēng bīng bào míng diàn huà）:0755-25701091\n罗湖区莲塘街道征兵办（luó hú qū lián táng jiē dào zhēng bīng bàn） 宣（xuān）","annotator":"Samuel Sadiq","notes":"Primär symbolisch und sekundär informativ (Aufruf zum Militärdienst)"},{"id":"CH_SZ_LH_LT_081","image":"CH_SZ_LH_LT_081.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chineisch","romanized_present":"ja","dominance":"Chinesisch","sign_type":"bottom-up","function":"gemischt","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Getränke","hk_relation_gastro":"","observed_text":"LINLEE\n<林里>（lín lǐ）柠檬茶（níng méng chá）","annotator":"Samuel Sadiq","notes":"Branding;  ist eine Kette"},{"id":"CH_SZ_LH_LT_082","image":"CH_SZ_LH_LT_082.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"bilingual","languages":"Chinesisch\nEnglisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Street Food","hk_relation_gastro":"","observed_text":"HEBIN SPICY HOT POT\n何彬麻辣烫（hé bīn má là tàng）\n多种汤底（duō zhǒng tāng dǐ）\n多种口味（duō zhǒng kǒu wèi）\n全国加盟（quán guó jiā méng） 400-678-1968","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_083","image":"CH_SZ_LH_LT_083.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Street Food","hk_relation_gastro":"","observed_text":"泰軒（tài xuān）\n隆江猪手饭店（lóng jiāng zhū shǒu fàn diàn）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_084","image":"CH_SZ_LH_LT_084.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gesundheit&Körperpflege","health_subgroup":"Massage","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"全国连锁（quán guó lián suǒ）\nZIYANG\n紫阳修脚（zǐ yáng xiū jiǎo）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_085","image":"CH_SZ_LH_LT_085.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"ja","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gesundheit&Körperpflege","health_subgroup":"Ohrreinigung (采耳)","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"净耳采耳（jìng ěr cǎi ěr）\n琦昇采（qí shēng cǎi）\nQI SHENG CAI\n免费检查全国连锁（miǎn fèi jiǎn chá quán guó lián suǒ）—深圳莲塘（shēn zhèn lián táng）2店（diàn）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_086","image":"CH_SZ_LH_LT_086.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"ja","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gesundheit&Körperpflege","health_subgroup":"Ohrreinigung (采耳)","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"可视采耳（kě shì cǎi ěr）\n佳耳乐（jiā ěr lè）\nJIA ER LE\n免费检查（miǎn fèi jiǎn chá）\n全国连锁（quán guó lián suǒ）\n莲塘店（lián táng diàn）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_087","image":"CH_SZ_LH_LT_087.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"bilingual","languages":"Chinesisch\nEnglisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Street Food","hk_relation_gastro":"ja","observed_text":"JINGEGE HK SOY SAUCE CHICKEN\n金戈戈 香港豉油鸡（jīn gē gē xiāng gǎng chǐ yóu jī）\n金戈戈（jīn gē gē）\n香港（xiāng gǎng）\n豉油鸡（chǐ yóu jī）\n第169家店合作（dì 169 jiā diàn hé zuò）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_088","image":"CH_SZ_LH_LT_088.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"gemischt","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Getränke","hk_relation_gastro":"","observed_text":"蜜雪冰城（mì xuě bīng chéng）","annotator":"Samuel Sadiq","notes":"Branding;  ist eine Kette"},{"id":"CH_SZ_LH_LT_089","image":"CH_SZ_LH_LT_089.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Street Food","hk_relation_gastro":"","observed_text":"老字号（lǎo zì hào）\n明胜隆江猪脚饭（míng shèng lóng jiāng zhū jiǎo fàn） \n潮汕汤粉面（cháo shàn tāng fěn miàn）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_090","image":"CH_SZ_LH_LT_090.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Restaurant","hk_relation_gastro":"","observed_text":"青湖山（qīng hú shān）・\n河源胡须鸡（hé yuán hú xū jī）\n山里养出来的鸡味（shān lǐ yǎng chū lái de jī wèi）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_091","image":"CH_SZ_LH_LT_091.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gesundheit&Körperpflege","health_subgroup":"Massage","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"圆大宝足道（yuán dà bǎo zú dào）\nNO.00216\n修脚 按摩（xiū jiǎo àn mó） \nSPA \n轻养生（qīng yǎng shēng）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_092","image":"CH_SZ_LH_LT_092.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gesundheit&Körperpflege","health_subgroup":"Massage","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"玉康源足道会所（yù kāng yuán zú dào huì suǒ）\n中医理疗 足疗按摩（zhōng yī lǐ liáo zú liáo àn mó）\n采耳修脚（cǎi ěr xiū jiǎo）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_093","image":"CH_SZ_LH_LT_093.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Restaurant","hk_relation_gastro":"","observed_text":"YUSHEN\n魚神脆皮烤鱼（yú shén cuì pí kǎo yú）\n合作热线（hé zuò rè xiàn）400-892-2100\n68元起（68 yuán qǐ）\n2-3人份 很脆很入味（rén fèn hěn cuì hěn rù wèi）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_094","image":"CH_SZ_LH_LT_094.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Street Food","hk_relation_gastro":"","observed_text":"郑记（zhèng jì）\n老上海（lǎo shàng hǎi）\n馄饨铺（hún tun pù ）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_095","image":"CH_SZ_LH_LT_095.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Street Food","hk_relation_gastro":"","observed_text":"林氏（lín shì）\n黑哥卤味（hēi gē lǔ wèi）\n罗湖区（luó hú qū） \n莲塘店（lián táng diàn）\n加盟热线（jiā méng rè xiàn）:400-962-8962","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_096","image":"CH_SZ_LH_LT_096.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gesundheit&Körperpflege","health_subgroup":"Massage","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"洗脸熊（xǐ liǎn xióng）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_097","image":"CH_SZ_LH_LT_097.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gesundheit&Körperpflege","health_subgroup":"Massage","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"恒昌足疗（héng chāng zú liáo ）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_098","image":"CH_SZ_LH_LT_098.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gesundheit&Körperpflege","health_subgroup":"Massage","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"东港足道（dōng gǎng zú dào）\n修脚（xiū jiǎo）\n足浴（zú yù）\nSPA\n泡脚（pào jiǎo）+修脚（xiū jiǎo）+按脚（àn jiǎo）49.9\n莲塘店（lián táng diàn）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_099","image":"CH_SZ_LH_LT_099.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gesundheit&Körperpflege","health_subgroup":"Massage","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"柠檬洗脸吧（níng méng xǐ liǎn ba）\n第十分店（dì shí fēn diàn）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_100","image":"CH_SZ_LH_LT_100.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Einzelhandel","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"招立特卖场（zhāo lì tè mài chǎng）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_101","image":"CH_SZ_LH_LT_101.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"top-down","function":"symbolisch","business_sector":"","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"共同关爱未成年人健康成长（gòng tóng guān ài wèi chéng nián rén jiàn kāng chéng zhǎng ）\n倾听 是最好的沟通（ qīng tīng shì zuì hǎo de gōu tōng ）\n陪伴 是最好的教育（ péi bàn shì zuì hǎo de jiào yù）\n中共深圳市罗湖区委宣传部 监制（zhōng gòng shēn zhèn shì luó hú qū wěi xuān chuán bù jiān zhì）","annotator":"Samuel Sadiq","notes":"Eventuell gemischt; schwach regulierend"},{"id":"CH_SZ_LH_LT_102","image":"CH_SZ_LH_LT_102.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"top-down","function":"symbolisch","business_sector":"","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"先行示范再出发（xiān xíng shì fàn zài chū fā ）\n聚力共建文明城（jù lì gòng jiàn wén míng chéng）\n中共深圳市罗湖区委宣传部 监制（zhōng gòng shēn zhèn shì luó hú qū wěi xuān chuán bù jiān zhì）","annotator":"Samuel Sadiq","notes":"Eventuell gemischt; schwach regulierend"},{"id":"CH_SZ_LH_LT_103","image":"CH_SZ_LH_LT_103.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"top-down","function":"symbolisch","business_sector":"","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"您的陪伴（nín de péi bàn）\n是对孩子最好的爱（shì duì hái zi zuì hǎo de ài）","annotator":"Samuel Sadiq","notes":"Eventuell gemischt; schwach regulierend"},{"id":"CH_SZ_LH_LT_104","image":"CH_SZ_LH_LT_104.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"top-down","function":"symbolisch","business_sector":"","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"全社会行动起来（quán shè huì xíng dòng qǐ lái）\n关心爱护未成年人健康成长（guān xīn ài hù wèi chéng nián rén jiàn kāng chéng zhǎng）\n中共深圳市罗湖区委宣传部（zhōng gòng shēn zhèn shì luó hú qū wěi xuān chuán bù）","annotator":"Samuel Sadiq","notes":"Eventuell gemischt; schwach regulierend"},{"id":"CH_SZ_LH_LT_105","image":"CH_SZ_LH_LT_105.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Einzelhandel","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"华联五金（huá lián wǔ jīn）\n欧普安全插排（ōu pǔ ān quán chā pái）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_106","image":"CH_SZ_LH_LT_106.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Restaurant","hk_relation_gastro":"","observed_text":"老北京铜锅涮（lǎo běi jīng tóng guō shuàn）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_107","image":"CH_SZ_LH_LT_107.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gesundheit&Körperpflege","health_subgroup":"Massage","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"No:2465 \n世龙世家（shì lóng shì jiā）\n手足健康护理连锁（shǒu zú jiàn kāng hù lǐ lián suǒ） \n始于1909（shǐ yú 1909）\n咨询电话（zī xún diàn huà） ：1589754558","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_108","image":"CH_SZ_LH_LT_108.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"bilingual","languages":"Chinesisch\nEnglisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Unterkunft/Vermietung","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"住商不动产（zhù shāng bù dòng chǎn）\n台湾住商集团（tái wān zhù shāng jí tuán）\n住商不动产（zhù shāng bù dòng chǎn）\nTAIWAN H&B REALTY GROUP","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_109","image":"CH_SZ_LH_LT_109.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Unterkunft/Vermietung","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"贝壳（bèi ké）\n让家更美好（ràng jiā gēng měi hǎo）\nVR真房源（zhēn fáng yuán）\n还是贝壳全（hái shì bèi ké quán）\n二手房（èr shǒu fáng） \n新房（xīn fáng）\n租房（zū fáng）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_110","image":"CH_SZ_LH_LT_110.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Einzelhandel","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"超润森鲜（chāo rùn sēn xiān）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_111","image":"CH_SZ_LH_LT_111.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gesundheit&Körperpflege","health_subgroup":"Massage","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"行运足浴按摩（xíng yùn zú yù àn mó）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_112","image":"CH_SZ_LH_LT_112.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch\ntraditonielles Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Restaurant","hk_relation_gastro":"ja","observed_text":"添運餐廰（tiān yùn cān tīng ）\n燒臘専門店（ shāo là zhuān mén diàn ）\n創於2018（ chuàng yú 2018）","annotator":"Wu Haiyang","notes":"Die gesamte Werbetafel ist in traditionellem Chinesisch verfasst, vielleicht weil „Shāo Là“ ein traditionelles kantonesisches oder traditionelles Hongkonger Gericht ist."},{"id":"CH_SZ_LH_LT_113","image":"CH_SZ_LH_LT_113.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gesundheit&Körperpflege","health_subgroup":"Massage","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"轻养生（qīng yǎng shēng）\n圆大宝（yuán dà bǎo）\nYUAN DA BAO\n修脚（xiū jiǎo） \n养生（yǎng shēng） \n按摩（àn mó） \n理疗（lǐ liáo）\n全国连锁（quán guó lián suǒ） \n莲塘二店（lián táng èr diàn）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_114","image":"CH_SZ_LH_LT_114.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"gemischt","business_sector":"Gesundheit&Körperpflege","health_subgroup":"Zahnmedizin","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"政府注册（zhèng fǔ zhù cè）\n口腔诊所（kǒu qiāng zhěn suǒ）\n支持港币（zhī chí gǎng bì）\n人民币（rén mín bì）1:1使用（shǐ yòng）\n为了您的口腔健康保驾护航（wèi le nín de kǒu qiāng jiàn kāng bǎo jià hù háng）\n联系电话（lián xì diàn huà）。","annotator":"Samuel Sadiq","notes":"Es ist sowohl eine Sachinformation als auch eine Methode, um das Einkaufen zu erleichtern"},{"id":"CH_SZ_LH_LT_115","image":"CH_SZ_LH_LT_115.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gesundheit&Körperpflege","health_subgroup":"Zahnmedizin","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"全国连锁（quán guó lián suǒ） \nNational chain\n深圳（shēn zhèn）\n富塘口腔诊所（fù táng kǒu qiāng zhěn suǒ ）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_116","image":"CH_SZ_LH_LT_116.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gesundheit&Körperpflege","health_subgroup":"Zahnmedizin","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"全瓷牙齿（quán cí yá chǐ） \n980元起（yuán qǐ）\n激光光固化树脂补牙（jī guāng guāng gù huà shù zhī bǔ yá）\n80起一颗（qǐ yì kē）\n超声波洗牙（chāo shēng bō xǐ yá）\n50元起（yuán qǐ）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_117","image":"CH_SZ_LH_LT_117.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gesundheit&Körperpflege","health_subgroup":"Zahnmedizin","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"好消息 好消息（hǎo xiāo xī hǎo xiāo xī ）\n富塘口腔诊所（ fù táng kǒu qiāng zhěn suǒ ）\n送福利了（ sòng fú lì le）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_118","image":"CH_SZ_LH_LT_118.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gesundheit&Körperpflege","health_subgroup":"Massage","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"紫发专业修脚（zǐ fā zhuān yè xiū jiǎo ）\nSPA\n肩颈（ jiān jǐng ）\n灰指甲（ huī zhǐ jiǎ ）\n甲沟炎（ jiǎ gōu yán）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_119","image":"CH_SZ_LH_LT_119.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gesundheit&Körperpflege","health_subgroup":"Massage","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"紫陽足浴（zǐ yáng zú yù）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_120","image":"CH_SZ_LH_LT_120.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Restaurant","hk_relation_gastro":"","observed_text":"黎耀阳（lí yào yáng）\n财神糖水铺（cái shén táng shuǐ pù）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_121","image":"CH_SZ_LH_LT_121.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Restaurant","hk_relation_gastro":"","observed_text":"非遗烧腊（fēi yí shāo là）\n创膳（chuàng shàn）\n金牌烧鹅（jīn pái shāo é）\n三代传承（sān dài chuán chéng）\n加盟热线（jiā méng rè xiàn）:400-878-5727\n莲塘店（lián táng diàn）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_122","image":"CH_SZ_LH_LT_122.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"ja","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gesundheit&Körperpflege","health_subgroup":"Ohrreinigung (采耳)","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"琦昇采（qí shēng cǎi）\nQI SHENG CAI\n免费检查（miǎn fèi jiǎn chá）\n净耳采耳（jìng ěr cǎi ěr）\n全国连锁（quán guó lián suǒ）\n深圳莲塘店（shēn zhèn lián táng diàn）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_123","image":"CH_SZ_LH_LT_123.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch\nEnglisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Restaurant","hk_relation_gastro":"","observed_text":"赵记传承（zhào jì chuán chéng）\n中国甜品（zhōng guó tián pǐn）\nCHIU GEE CHINESE DESSERT","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_124","image":"CH_SZ_LH_LT_124.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gesundheit&Körperpflege","health_subgroup":"Massage","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"轻养生（qīng yǎng shēng）\n圆大宝修脚（yuán dà bǎo xiū jiǎo）\n连锁品牌（lián suǒ pǐn pái） NO:002 莲塘一店（lián táng yī diàn）\n推拿（tuī ná） 按摩（àn mó） 理疗（lǐ liáo） 养生（yǎng shēng）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_125","image":"CH_SZ_LH_LT_125.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Einzelhandel","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"便利寄卖行（biàn lì jì mài xíng）\n回收黄金名酒礼品（huí shōu huáng jīn míng jiǔ lǐ pǐn） 补品名表名包（bǔ pǐn míng biǎo míng bāo）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_126","image":"CH_SZ_LH_LT_126.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gesundheit&Körperpflege","health_subgroup":"Massage","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"深圳红石榴健康有限公司（shēn zhèn hóng shí liú jiàn kāng yǒu xiàn gōng sī）\nShenzhen Pomegranate Leisure Wellness Co., Ltd\n紅石榴修腳（hóng shí liú xiū jiǎo）\nNO:SZ0001 聚宝店（jù bǎo diàn）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_127","image":"CH_SZ_LH_LT_127.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gesundheit&Körperpflege","health_subgroup":"Sonstiges","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"优剪（yōu jiǎn）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_128","image":"CH_SZ_LH_LT_128.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"ja","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gesundheit&Körperpflege","health_subgroup":"Massage","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"全国连锁（quán guó lián suǒ）\n紫阳修脚（zǐ yáng xiū jiǎo）\nZIYANG\n足浴（zú yù） 采耳（cǎi ěr） 肉刺（ròu cì） 灰指甲（huī zhǐ jiǎ）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_129","image":"CH_SZ_LH_LT_129.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Einzelhandel","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"泰源厨具（tài yuán chú jù）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_130","image":"CH_SZ_LH_LT_130.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gesundheit&Körperpflege","health_subgroup":"Massage","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"轻养生（qīng yǎng shēng）\n圆大宝修脚（yuán dà bǎo xiū jiǎo）\n连锁品牌（lián suǒ pǐn pái） NO:00220 聚宝店（jù bǎo diàn）\n推拿（tuī ná） 按摩（àn mó） 理疗（lǐ liáo） 养生（yǎng shēng）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_131","image":"CH_SZ_LH_LT_131.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"bilingual","languages":"Chinesisch\nEnglisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"top-down","function":"informativ","business_sector":"","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"市场监督管理（shì chǎng jiān dū guǎn lǐ）\nMarket Regulation","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_132","image":"CH_SZ_LH_LT_132.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"bilingual","languages":"Chinesisch\nEnglisch","romanized_present":"nein","dominance":"Englisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gesundheit&Körperpflege","health_subgroup":"Sonstiges","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"SOHO \n快剪（kuài jiǎn）","annotator":"Samuel Sadiq","notes":"Besitzer ist Plattenliebhaber"},{"id":"CH_SZ_LH_LT_133","image":"CH_SZ_LH_LT_133.png","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"bilingual","languages":"Chinesisch\nEnglisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Restaurant","hk_relation_gastro":"","observed_text":"深圳老字號（shēn zhèn lǎo zì hào）\n悦得闲（yuè dé xián）\n源于（yuán yú） 1998\n廣式點心茶樓（guǎng shì diǎn xīn chá lóu）\n全天茶市（quán tiān chá shì）\n2024年入选品牌（nián rù xuǎn pǐn pái）\n悦得闲广式点心茶楼（yuè dé xián guǎng shì diǎn xīn chá lóu）\n2楼（lóu） 8:00 开市（kāi shì）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_134","image":"CH_SZ_LH_LT_134.png","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"gemischt","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Getränke","hk_relation_gastro":"","observed_text":"蜜雪冰城（mì xuě bīng chéng）","annotator":"Samuel Sadiq","notes":"Branding;  ist eine Kette"},{"id":"CH_SZ_LH_LT_135","image":"CH_SZ_LH_LT_135.png","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Dienstleistungen","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"中国体育彩票（zhōng guó tǐ yù cǎi piào）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_136","image":"CH_SZ_LH_LT_136.png","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"ja","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Dienstleistungen","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"携程旅游（xié chéng lǚ yóu）\n携手征程看世界（xié shǒu zhēng chéng kàn shì jiè）·惠及莲塘千万家（huì jí lián táng qiān wàn jiā）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_137","image":"CH_SZ_LH_LT_137.png","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Dienstleistungen","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"景福（jǐng fú）\nJINGFUPET\n景福宠物（jǐng fú chǒng wù）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_138","image":"CH_SZ_LH_LT_138.png","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gesundheit&Körperpflege","health_subgroup":"Ohrreinigung (采耳)","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"皇室耳道（huáng shì ěr dào）\n专业采耳（zhuān yè cǎi ěr） \n美容（měi róng） \n美体（měi tǐ） \n养生馆（yǎng shēng guǎn）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_139","image":"CH_SZ_LH_LT_139.png","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Dienstleistungen","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"携程旅游（xié chéng lǚ yóu）\n旅游（lǚ yóu） \n就来（jiù lái）\n携程（xié chéng）\n门店（mén diàn）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_140","image":"CH_SZ_LH_LT_140.png","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"bilingual","languages":"Chinesisch\nEnglisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Dienstleistungen","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"星声苑（xīng shēng yuàn）\n少儿语言艺术学院（shào ér yǔ yán yì shù xué yuàn）\nKINGSHENGYUAN LANGUAGE ART TRAINING\n小主持（xiǎo zhǔ chí） · 少儿口才（shào ér kǒu cái）\n咨询电话（zī xún diàn huà）：133 4297 3391","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_141","image":"CH_SZ_LH_LT_141.png","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Dienstleistungen","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"鹏城（péng chéng） \n国际（guó jì） \n象棋（xiàng qí）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_142","image":"CH_SZ_LH_LT_142.png","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"ja","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Dienstleistungen","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"鑫信艺（xīn xìn yì） \nXIN XIN YI\n照相馆（zhào xiàng guǎn）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_143","image":"CH_SZ_LH_LT_143.png","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Dienstleistungen","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"正章乾洗（zhèng zhāng qián xǐ） \n正章干洗搬到旁边（zhèng zhāng gān xǐ bān dào páng biān）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_144","image":"CH_SZ_LH_LT_144.png","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Einzelhandel","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"M.Y.J\n美宜佳（měi yí jiā）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_145","image":"CH_SZ_LH_LT_145.png","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Unterkunft/Vermietung","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"LIANJIA.链家（liàn jiā）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_146","image":"CH_SZ_LH_LT_146.png","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Unterkunft/Vermietung","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"Fulee富房（fù fáng）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_147","image":"CH_SZ_LH_LT_147.png","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Unterkunft/Vermietung","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"中原（zhōng yuán） \n中原地产（zhōng yuán dì chǎn）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_148","image":"CH_SZ_LH_LT_148.png","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"bilingual","languages":"Chinesisch\nEnglisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Dienstleistungen","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"证件照 形象照 全家福 打印装订 广告印刷（zhèng jiàn zhào xíng xiàng zhào quán jiā fú dǎ yìn zhuāng dìng guǎng gào yìn shuā）拍刻风照相馆（pāi kè fēng zhào xiàng guǎn）\nPHOTOWIND\n莲塘店（lián táng diàn）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_149","image":"CH_SZ_LH_LT_149.png","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Restaurant","hk_relation_gastro":"","observed_text":"炒火鍋（chǎo huǒ guō）\n放养果园脆皮鸡（fàng yǎng guǒ yuán cuì pí jī）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_150","image":"CH_SZ_LH_LT_150.png","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Street Food","hk_relation_gastro":"","observed_text":"威记自选快餐（wēi jì zì xuǎn kuài cān）\n隆江猪脚（lóng jiāng zhū jiǎo）\n广东烧腊（guǎng dōng shāo là）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_151","image":"CH_SZ_LH_LT_151.png","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Street Food","hk_relation_gastro":"","observed_text":"咏春葱油饼（yǒng chūn cōng yóu bǐng）\n每一张饼都是手工现做（měi yì zhāng bǐng dōu shì shǒu gōng xiàn zuò）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_152","image":"CH_SZ_LH_LT_152.png","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"ja","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Street Food","hk_relation_gastro":"","observed_text":"港湾（gǎng wān）\ngang wan\n澄海卤鹅（chéng hǎi lǔ é）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_153","image":"CH_SZ_LH_LT_153.png","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Restaurant","hk_relation_gastro":"","observed_text":"二郎田鸡（èr láng tián jī）\n请上二楼 火锅 湘菜（qǐng shàng èr lóu huǒ guō xiāng cài）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_154","image":"CH_SZ_LH_LT_154.png","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"bilingual","languages":"Chinesisch\nEnglisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Restaurant","hk_relation_gastro":"","observed_text":"珠江啤酒（zhū jiāng pí jiǔ）\nPEARL RIVER\n湖南湘菜馆（hú nán xiāng cài guǎn）\n指定啤酒免费畅饮（zhǐ dìng pí jiǔ miǎn fèi chàng yǐn）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_155","image":"CH_SZ_LH_LT_155.png","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Restaurant","hk_relation_gastro":"","observed_text":"福兴隆饺子馆（fú xīng lóng jiǎo zi guǎn）\n大连海鲜·老菜·水饺（dà lián hǎi xiān · lǎo cài · shuǐ jiǎo）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_156","image":"CH_SZ_LH_LT_156.png","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"bilingual","languages":"Chinesisch\nEnglisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Dienstleistungen","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"柯达（kē dá）express\n新艺数码摄影冲印（xīn yì shù mǎ shè yǐng chōng yìn）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_157","image":"CH_SZ_LH_LT_157.png","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"bilingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"gemischt","business_sector":"Gastronomie","health_subgroup":"","gastro_subgroup":"Getränke","hk_relation_gastro":"","observed_text":"沪上阿姨（hù shàng ā yí）\nAUNTEA JENNY\n摩登东方茶（mó dēng dōng fāng chá）","annotator":"Samuel Sadiq","notes":"Branding;  ist eine Kette"},{"id":"CH_SZ_LH_LT_158","image":"CH_SZ_LH_LT_158.png","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch\nEnglisch\ntraditionelles Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gesundheit&Körperpflege","health_subgroup":"Massage","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"医保定点（yī bǎo dìng diǎn）\n宏坤堂中醫診（hóng kūn táng zhōng yī zhěn）\n名医坐诊（míng yī zuò zhěn） \n养生保健（yǎng shēng bǎo jiàn） \n针灸针刀（zhēn jiǔ zhēn dāo） \n推拿按摩（tuī ná àn mó） \n拔罐刮痧（bá guàn guā shā） \n中药膏方（zhōng yào gāo fāng）","annotator":"Wu Haiyang","notes":"„中醫診“ ist traditionelles Chinesisch; vielleicht liegt das daran, dass es mit der traditionellen chinesischen Kultur „Traditionelle Chinesische Medizin“ zu tun hat"},{"id":"CH_SZ_LH_LT_159","image":"CH_SZ_LH_LT_159.png","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"ja","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Gesundheit&Körperpflege","health_subgroup":"Massage","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"轻养生（qīng yǎng shēng）\n圆大宝（yuán dà bǎo）\nYUAN DA BAO\n修脚（xiū jiǎo） \n养生（yǎng shēng） \n按摩（àn mó） \n理疗（lǐ liáo）\n国连锁（guó lián suǒ） \nNo:003 莲塘二店（lián táng èr diàn）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_160","image":"CH_SZ_LH_LT_160.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"kommerziell","business_sector":"Dienstleistungen","health_subgroup":"Transport","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"香港四哥推荐莲塘好去处（Xiānggǎng Sì Gē tuījiàn Liántáng hǎo qùchù）\n莲塘口岸（Liántáng Kǒu’àn）\n穿梭小巴（chuānsuō xiǎobā）\n二楼平台17号车位（èr lóu píngtái 17 hào chēwèi）\n旺东生酒楼（Wàngdōngshēng Jiǔlóu）\n莲塘街市（Liántáng Jiēshì）\n四哥（Sì Gē）\n香港四大美食家（Xiānggǎng sì dà měishíjiā）","annotator":"","notes":""},{"id":"CH_SZ_LH_LT_161","image":"CH_SZ_LH_LT_161.jpg","location":"Shenzhen\nLiantang","status":"einbezogen","configuration":"monolingual","languages":"Chinesisch","romanized_present":"nein","dominance":"Chinesisch","sign_type":"bottom-up","function":"informativ","business_sector":"","health_subgroup":"","gastro_subgroup":"","hk_relation_gastro":"","observed_text":"招聘（zhāopìn）\n接待员：要求女性（jiēdàiyuán: yāoqiú nǚxìng）\n性格活泼（xìnggé huópō）\n身高1.65以上（shēngāo 1.65 yǐshàng）\n必须会粤语（bìxū huì Yuèyǔ）\n英语6级以上（Yīngyǔ liù jí yǐshàng）\n通话流畅（tōnghuà liúchàng）\n薪水12000保底（xīnshuǐ 12000 bǎodǐ）\n做过销售的优先（zuòguo xiāoshòu de yōuxiān）\n联系电话（liánxì diànhuà）\n15928561793","annotator":"","notes":""}];
+
+const $ = s => document.querySelector(s);
+const esc = (s="") => String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+const display = (v) => v ? esc(v) : '—';
+const imagePath = r => `Bilder/${encodeURIComponent(r.image)}`;
+
+function values(key){
+  return [...new Set(RECORDS.map(r => (r[key] || '').trim()).filter(Boolean))]
+    .sort((a,b)=>a.localeCompare(b,'de'));
+}
+function fillSelect(id,key){
+  const sel=$(id);
+  values(key).forEach(v=>{
+    const o=document.createElement('option');
+    o.value=v;o.textContent=v;sel.appendChild(o);
+  });
+}
+fillSelect('#filterType','sign_type');
+fillSelect('#filterFunction','function');
+fillSelect('#filterConfig','configuration');
+fillSelect('#filterSector','business_sector');
+
+const bottom = RECORDS.filter(r => r.sign_type.trim().toLowerCase()==='bottom-up').length;
+const top = RECORDS.filter(r => r.sign_type.trim().toLowerCase()==='top-down').length;
+const multi = RECORDS.filter(r => ['bilingual','multilingual'].includes(r.configuration.trim().toLowerCase())).length;
+$('#statRecords').textContent = RECORDS.length;
+$('#statBottom').textContent = bottom;
+$('#statTop').textContent = top;
+$('#statMulti').textContent = multi;
+
+function compactText(r){
+  const t=(r.observed_text||'').replace(/\s+/g,' ').trim();
+  if(t) return t;
+  if(r.notes) return r.notes.replace(/\s+/g,' ').trim();
+  return 'Research record';
+}
+function tags(r){
+  return [r.languages,r.dominance,r.business_sector,r.gastro_subgroup,r.health_subgroup]
+    .filter(Boolean).join(' · ').replace(/\n/g,' / ');
+}
+
+function render(){
+  const q=$('#search').value.trim().toLowerCase();
+  const type=$('#filterType').value;
+  const fn=$('#filterFunction').value;
+  const cfg=$('#filterConfig').value;
+  const sec=$('#filterSector').value;
+
+  const filtered=RECORDS.filter(r=>{
+    const hay=Object.values(r).join(' ').toLowerCase();
+    return (!q || hay.includes(q))
+      && (!type || r.sign_type===type)
+      && (!fn || r.function===fn)
+      && (!cfg || r.configuration===cfg)
+      && (!sec || r.business_sector===sec);
+  });
+
+  $('#resultCount').textContent=`${filtered.length} / ${RECORDS.length} Records`;
+  const grid=$('#grid');
+  if(!filtered.length){
+    grid.innerHTML='<div class="empty">Keine Records entsprechen dieser Auswahl.</div>';
+    return;
+  }
+
+  grid.innerHTML=filtered.map(r=>`
+    <article class="card" data-id="${esc(r.id)}" tabindex="0" aria-label="Record ${esc(r.id)} öffnen">
+      <div class="record-head">
+        <span>${esc(r.id)}</span>
+        <span>${display(r.sign_type)} / ${display(r.function)}</span>
+      </div>
+      <img class="card-image" src="${imagePath(r)}" alt="${esc(r.id)}" loading="lazy">
+      <h3>${esc(compactText(r))}</h3>
+      <div class="tags">${esc(tags(r) || 'Korpusdatensatz')}</div>
+      <span class="view-record">Record öffnen →</span>
+    </article>
+  `).join('');
+
+  grid.querySelectorAll('.card').forEach(card=>{
+    card.addEventListener('click',()=>openRecord(card.dataset.id));
+    card.addEventListener('keydown',e=>{
+      if(e.key==='Enter' || e.key===' '){e.preventDefault();openRecord(card.dataset.id);}
+    });
+  });
+}
+
+['#search','#filterType','#filterFunction','#filterConfig','#filterSector'].forEach(id=>{
+  $(id).addEventListener('input',render);
+  $(id).addEventListener('change',render);
+});
+$('#clearFilters').addEventListener('click',()=>{
+  $('#search').value='';
+  ['#filterType','#filterFunction','#filterConfig','#filterSector'].forEach(id=>$(id).value='');
+  render();
+});
+
+function row(label,value,extra=''){
+  if(!value) return '';
+  return `<div class="data-row"><dt>${esc(label)}</dt><dd class="${extra}">${display(value)}</dd></div>`;
+}
+function badge(v){return v ? `<span class="badge">${esc(v)}</span>` : '';}
+
+function openRecord(id){
+  const r=RECORDS.find(x=>x.id===id);
+  if(!r)return;
+  const hierarchy=[r.business_sector,r.gastro_subgroup,r.health_subgroup].filter(Boolean).join(' → ');
+  $('#drawerBody').innerHTML=`
+    <div class="record-detail">
+      <div class="detail-photo-wrap">
+        <a href="${imagePath(r)}" download="${esc(r.image)}" title="Originalbild herunterladen">
+          <img class="detail-photo" src="${imagePath(r)}" alt="${esc(r.id)}">
+        </a>
+        <div class="photo-note"><span>${esc(r.image)}</span><span>Originalfarbe · Download verfügbar</span></div>
+      </div>
+      <div>
+        <h2 class="record-title" id="drawerTitle">${esc(r.id)}</h2>
+        <div class="badges">
+          ${badge(r.sign_type)}${badge(r.function)}${badge(r.configuration)}${badge(r.dominance)}
+        </div>
+        <dl class="record-data">
+          ${row('Sichtbarer Text (Korpus)',r.observed_text,'observed')}
+          ${row('Ort',r.location)}
+          ${row('Sign-Status',r.status)}
+          ${row('Linguistische Konfiguration',r.configuration)}
+          ${row('Sprachen',r.languages)}
+          ${row('Romanisiertes Chinesisch vorhanden',r.romanized_present)}
+          ${row('Dominanz',r.dominance)}
+          ${row('Sign-Typ',r.sign_type)}
+          ${row('Funktion',r.function)}
+          ${row('Geschäftlicher Bereich',hierarchy)}
+          ${row('Hongkong-Bezug Gastronomie',r.hk_relation_gastro)}
+          ${row('Annotator',r.annotator)}
+          ${row('Erläuterungen',r.notes)}
+        </dl>
+        <div class="downloads">
+          <a class="btn primary" href="${imagePath(r)}" download="${esc(r.image)}">Originalbild ↓</a>
+          <button class="btn" onclick="downloadRecord('${esc(r.id)}')">Record JSON ↓</button>
+        </div>
+      </div>
+    </div>`;
+  $('#overlay').classList.add('open');
+  $('#overlay').setAttribute('aria-hidden','false');
+  document.body.style.overflow='hidden';
+  history.replaceState(null,'',`#${encodeURIComponent(id)}`);
+}
+function closeRecord(){
+  $('#overlay').classList.remove('open');
+  $('#overlay').setAttribute('aria-hidden','true');
+  document.body.style.overflow='';
+  history.replaceState(null,'',location.pathname+location.search);
+}
+$('#drawerClose').addEventListener('click',closeRecord);
+$('#overlay').addEventListener('click',e=>{if(e.target===$('#overlay'))closeRecord();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape' && $('#overlay').classList.contains('open'))closeRecord();});
+
+function saveBlob(content,type,name){
+  const blob=new Blob([content],{type});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download=name;a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function downloadRecord(id){
+  const r=RECORDS.find(x=>x.id===id);
+  if(r)saveBlob(JSON.stringify(r,null,2),'application/json;charset=utf-8',`${id}.json`);
+}
+$('#downloadJson').addEventListener('click',()=>{
+  saveBlob(JSON.stringify(RECORDS,null,2),'application/json;charset=utf-8','CH_SZ_LH_LT_dataset.json');
+});
+$('#downloadCsv').addEventListener('click',()=>{
+  const keys=Object.keys(RECORDS[0]);
+  const q=v=>`"${String(v??'').replace(/"/g,'""')}"`;
+  const csv='\uFEFF'+[keys.join(','),...RECORDS.map(r=>keys.map(k=>q(r[k])).join(','))].join('\n');
+  saveBlob(csv,'text/csv;charset=utf-8','CH_SZ_LH_LT_dataset.csv');
+});
+
+render();
+
+if(location.hash.startsWith('#CH_SZ_LH_LT_')){
+  const id=decodeURIComponent(location.hash.slice(1));
+  if(RECORDS.some(r=>r.id===id))setTimeout(()=>openRecord(id),50);
+}
+</script>
+</body>
+</html>
